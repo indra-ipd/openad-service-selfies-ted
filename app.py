@@ -11,7 +11,9 @@ from openad_service_utils import (
     PropertyInfo,
 )
 from openad_service_utils import start_server
-from load import load_smi_ted
+from load import *
+
+
 
 # Example Classifier  / Model Import
 # -----------------------USER MODEL LIBRARY-----------------------------------
@@ -88,27 +90,25 @@ class MySimplePredictorCombo(SimplePredictorMultiAlgorithm):
             if not pt_file_list:
                 raise FileNotFoundError(f"No checkpoint file '{pt_dir}'.")
             pt_file = pt_file_list[0]
-            vocab_file_list = [
+            """vocab_file_list = [
                 f for f in os.listdir(pt_dir) if f.endswith(".txt") and os.path.isfile(os.path.join(pt_dir, f))
             ]
             if not vocab_file_list:
                 raise FileNotFoundError(f"No vocab/txt file '{pt_dir}'.")
-            vocab_file = vocab_file_list[0]
+            vocab_file = vocab_file_list[0]"""
         except FileNotFoundError as e:
             print(f"Wrapper Setup Error: {e}")
         """ lock and load model for current property """
-        self.smi_ted_model = load_smi_ted(ckpt_filename=pt_file, vocab_filename=vocab_file, folder=pt_dir)
-        self.smi_ted_model.eval()
-        """ execute and return smi-ted analysis results """
-        df_test_emb = self.smi_ted_model.encode([sample])
-        torch_emb = torch.tensor(df_test_emb.values)
-        outputs: np.ndarray = self.smi_ted_model.net(torch_emb).cpu().detach().numpy()
-        results_list = outputs.tolist()
-        """
-        Logic below will count how many floats were returned. If more 
-        than one float is returned by the SMI-TED model then it will return 
-        the list of the floats to the client, else just return one float.
-        """
+
+        self.selfies_ted_model, self.tokenizer = load_finetuned_model(ckpt_filename=pt_file)
+        self.selfies_ted_model.eval()
+
+        finetuned_model, tokenizer = load_finetuned_model(ckpt_filename=pt_file)
+        finetuned_model.eval()
+
+        selfies_ted_model = SELFIESEncoder(model=finetuned_model)
+        results_list = selfies_ted_model.predict(sample)
+
         num_of_floats_returned = len(results_list[0])
         if num_of_floats_returned > 1:
             return results_list[0]
@@ -124,10 +124,10 @@ for key, value in NESTED_DATA_SETS.items():
         props.set_parameters(
             algorithm_name="smi_ted", algorithm_application=key, available_properties=get_property_list(value)
         )
-        MySimplePredictorCombo.register(props, no_model=False)
+        MySimplePredictorCombo.register(props, no_model=True) #ipd False
 
 # start the service running on port 8080
 if __name__ == "__main__":
     print(f"Selected Algorithm Applications: {selected_algorithm_apps}")
     # start the server
-    start_server(port=8080)
+    start_server(port=8034)
