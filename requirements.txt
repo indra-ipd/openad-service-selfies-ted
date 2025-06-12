@@ -1,3 +1,4 @@
 openad-service-utils @ git+https://github.com/acceleratedscience/openad_service_utils.git@0.3.1
 biomed-multi-view @ git+https://github.com/acceleratedscience/biomed-multi-view.git
 numpy<2
+selfies
