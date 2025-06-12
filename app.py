@@ -98,7 +98,7 @@ class MySimplePredictorCombo(SimplePredictorMultiAlgorithm):
         except FileNotFoundError as e:
             print(f"Wrapper Setup Error: {e}")
         """ lock and load model for current property """
-        print(os.path.join(pt_dir, pt_file))
+
         self.selfies_ted_model, self.tokenizer = load_finetuned_model(ckpt_filename=os.path.join(pt_dir, pt_file))
         self.selfies_ted_model.eval()
 
