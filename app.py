@@ -14,7 +14,6 @@ from openad_service_utils import start_server
 from load import *
 
 
-
 # Example Classifier  / Model Import
 # -----------------------USER MODEL LIBRARY-----------------------------------
 from property_classifier import ClassificationModel
@@ -99,32 +98,42 @@ class MySimplePredictorCombo(SimplePredictorMultiAlgorithm):
         except FileNotFoundError as e:
             print(f"Wrapper Setup Error: {e}")
         """ lock and load model for current property """
-
-        self.selfies_ted_model, self.tokenizer = load_finetuned_model(ckpt_filename=pt_file)
+        print(os.path.join(pt_dir, pt_file))
+        self.selfies_ted_model, self.tokenizer = load_finetuned_model(ckpt_filename=os.path.join(pt_dir, pt_file))
         self.selfies_ted_model.eval()
 
-        finetuned_model, tokenizer = load_finetuned_model(ckpt_filename=pt_file)
+        finetuned_model, tokenizer = load_finetuned_model(ckpt_filename=os.path.join(pt_dir, pt_file))
         finetuned_model.eval()
 
-        selfies_ted_model = SELFIESEncoder(model=finetuned_model)
+        selfies_ted_model = SELFIESEncode
+        r(model=finetuned_model)
         results_list = selfies_ted_model.predict(sample)
+        results_list = results_list.tolist()
 
-        num_of_floats_returned = len(results_list[0])
+        if isinstance(results_list, float):
+            return results_list
+        if isinstance(results_list, list):
+            num_of_floats_returned = len(results_list[0])
+        else:
+            return results_list
+
         if num_of_floats_returned > 1:
             return results_list[0]
         else:
             return results_list[0][0]
 
+
 # limiting to open source available checkpoints
-selected_algorithm_apps = os.getenv("SELECTED_ALGORITHM_APPS", default="QM9").split(",")
+selected_algorithm_apps = os.getenv("SELECTED_ALGORITHM_APPS", default="QM9-SELFIES").split(",")
 
 for key, value in NESTED_DATA_SETS.items():
     if key in selected_algorithm_apps:
         props = NestedParameters2()
+        print(get_property_list(value))
         props.set_parameters(
-            algorithm_name="smi_ted", algorithm_application=key, available_properties=get_property_list(value)
+            algorithm_name="selfies_ted", algorithm_application=key, available_properties=get_property_list(value)
         )
-        MySimplePredictorCombo.register(props, no_model=True) #ipd False
+        MySimplePredictorCombo.register(props, no_model=False)  # ipd False
 
 # start the service running on port 8080
 if __name__ == "__main__":

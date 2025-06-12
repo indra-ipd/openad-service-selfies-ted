@@ -34,15 +34,16 @@ ENV HF_HOME="/tmp/.cache/huggingface" \
     LOGGING_CONFIG_PATH="/tmp/app.log" \
     gt4sd_local_cache_path="/tmp/.openad_models" \
     GT4SD_S3_HOST="s3.us-east-1.amazonaws.com" \
-    gt4sd_s3_bucket_algorithms="ad-prod-biomed"\
-    gt4sd_s3_bucket_properties="ad-prod-biomed"\
+    gt4sd_s3_bucket_algorithms="ad-stage-fm4m-algorithms"\
+    gt4sd_s3_bucket_properties="ad-stage-fm4m-algorithms"\
     GT4SD_S3_SECRET_KEY="" \
     GT4SD_S3_ACCESS_KEY="" \
     GT4SD_S3_HOST_HUB="s3.us-east-1.amazonaws.com" \
     GT4SD_S3_ACCESS_KEY_HUB="" \
     GT4SD_S3_SECRET_KEY_HUB="" \
-    gt4sd_s3_bucket_hub_algorithms="ad-prod-biomed"\
-    gt4sd_s3_bucket_hub_properties="ad-prod-biomed"
+    gt4sd_s3_bucket_hub_algorithms="ad-stage-fm4m-algorithms"\
+    gt4sd_s3_bucket_hub_properties="ad-stage-fm4m-algorithms"\
+    SELECTED_ALGORITHM_APPS="QM9-SELFIES"
 
 # Specify the command to run when the container starts
 CMD ["python", "app.py"]

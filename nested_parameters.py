@@ -1,6 +1,6 @@
-"""       This library defines nested parameters
-For each Service you wih to define place a Class of your Naming based on 
-the below template then use it in the registration of the Function 
+"""This library defines nested parameters
+For each Service you wih to define place a Class of your Naming based on
+the below template then use it in the registration of the Function
 """
 
 from typing import List, Union, Dict, Any
@@ -125,6 +125,7 @@ class NestedParameters2(PropertyPredictorParameters):
             elif key == "algorithm_version":
                 self.algorithm_version = value
 
+
 NESTED_DATA_SETS = {}
 
 QM8 = {
@@ -240,7 +241,7 @@ QM8 = {
 }
 
 
-NESTED_DATA_SETS["QM8"] = QM8
+NESTED_DATA_SETS["QM8-SELFIES"] = QM8
 
 # Descriptions mostly from QM9 deepchem docs:
 # https://deepchem.readthedocs.io/en/latest/api_reference/moleculenet.html#qm9-datasets
@@ -354,7 +355,7 @@ QM9 = {
         "max_value": "inf",
     },
 }
-NESTED_DATA_SETS["QM9"] = QM9
+NESTED_DATA_SETS["QM9-SELFIES"] = QM9
 
 
 molecule_net = {
@@ -481,4 +482,4 @@ molecule_net = {
         "max_value": "1,1,1,1,1,1,1,1,1,1,1,1",
     },
 }
-NESTED_DATA_SETS["molecule_net"] = molecule_net
+NESTED_DATA_SETS["molecule_net-SELFIES"] = molecule_net
