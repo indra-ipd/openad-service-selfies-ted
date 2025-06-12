@@ -105,7 +105,7 @@ class MySimplePredictorCombo(SimplePredictorMultiAlgorithm):
         finetuned_model, tokenizer = load_finetuned_model(ckpt_filename=os.path.join(pt_dir, pt_file))
         finetuned_model.eval()
 
-        selfies_ted_model = SELFIESEncode
+        selfies_ted_model = SELFIESEncoder
         r(model=finetuned_model)
         results_list = selfies_ted_model.predict(sample)
         results_list = results_list.tolist()
