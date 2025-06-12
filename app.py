@@ -105,22 +105,21 @@ class MySimplePredictorCombo(SimplePredictorMultiAlgorithm):
         finetuned_model, tokenizer = load_finetuned_model(ckpt_filename=os.path.join(pt_dir, pt_file))
         finetuned_model.eval()
 
-        selfies_ted_model = SELFIESEncoder
-        r(model=finetuned_model)
+        selfies_ted_model = SELFIESEncoder(model=finetuned_model)
         results_list = selfies_ted_model.predict(sample)
         results_list = results_list.tolist()
 
         if isinstance(results_list, float):
             return results_list
         if isinstance(results_list, list):
-            num_of_floats_returned = len(results_list[0])
+            num_of_floats_returned = len(results_list)
         else:
             return results_list
 
         if num_of_floats_returned > 1:
-            return results_list[0]
+            return results_list
         else:
-            return results_list[0][0]
+            return results_list[0]
 
 
 # limiting to open source available checkpoints
